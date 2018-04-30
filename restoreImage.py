@@ -1,6 +1,7 @@
 from PIL import Image
 import random
 
+filename = 'diplo.jpeg'
 def restore(filename):
     # Create the Pillow image from the imported image
     img = Image.open(filename)
@@ -40,7 +41,7 @@ def replaceBG(filename, BGPixel):
 
     newImg.save("good.jpg")
 
-restore("bad2.jpg")
+restore(filename)
 
 # For future work: the above code runs and successfully replacest the background of a wrinkled image.
 # The next step to make this applicable is to replace only background and avoid text overwriting.

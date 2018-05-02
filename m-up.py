@@ -1,7 +1,19 @@
 from PIL import Image
 
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# Test of the code in this file using hardcoded arguments.
 filename = 'bad2.jpg'
 n_up = 2
+multipleUp(filename, n_up)
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# Description: This function creates a multiple-up image from a source image.
+# Required arguments for the function are a string representing a filename and
+# an integer value of 2, 4, or 8 that represents the amount of duplicate source
+# images. The output is a new file. Exception is thrown for invalid arguments.
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 def multipleUp(filename, n):
     if (n == 2):
@@ -10,6 +22,12 @@ def multipleUp(filename, n):
         fourUp(filename)
     else:
         print("Multiple-up documents require a 2^n number.")
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# Description: This function is a helper to the multipleUp() function. If this
+# function is called, it creates a 2-up image from using the source file argument
+# from the multipleUp() function.
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 def twoUp(filename):
     # get source image
@@ -28,6 +46,12 @@ def twoUp(filename):
             #put pixel on bottom half of page
             target.putpixel((x, y+source.height), sourcePixel)
     target.save("2up.jpg")
+
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# Description: This function is a helper to the multipleUp() function. If this
+# function is called, it creates a 2-up image from using the source file argument
+# from the multipleUp() function.
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 def fourUp(filename):
         # get source image
@@ -50,5 +74,3 @@ def fourUp(filename):
                 # put pixel in 4th quadrant
                 target.putpixel((x+source.width, y+source.height), sourcePixel)
         target.save("2up.jpg")
-
-multipleUp(filename, n_up)

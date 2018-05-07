@@ -2,11 +2,11 @@ from PIL import Image
 
 def color_Multiply(img):
     color = "wrongcolor"
-    while color != "red" and color != "green" and color != "blue":
+    while color != "increase red" and color != "increase green" and color != "increaseblue":
         color = input("Input the color you want to modify (red, green or blue): ")
     value = input("Input the value by which you want the color to be multiplied: ")       
     if color == "red":
-        red_Multiply(img, value)
+        return red_Multiply(img, value)##
     if color == "green":
         green_Multiply(img, value)
     if color == "blue":
@@ -19,10 +19,11 @@ def red_Multiply(img, value):
     new_img = Image.new('RGB', (img_size[0], img_size[1]))
     new_list = []
     for p in img.getdata():
-        temp = ((p[0]*int(value))%255, p[1], p[2])
+        temp = ((p[0]*int(value))%255, p[1], p[2])#Fix the math
         new_list.append(temp)
     new_img.putdata(new_list)
-    new_img.save('new_pic.jpg')
+    #new_img.save('new_pic.jpg')
+    return new_img#Finish this
 
 #mulitply green value
 def green_Multiply(img, value):
@@ -47,6 +48,3 @@ def blue_Multiply(img, value):
         new_list.append(temp)
     new_img.putdata(new_list)
     new_img.save('new_pic.jpg')
-
-img = input("Input the name of the picture you want to modify: ")
-color_Multiply(img)

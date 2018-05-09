@@ -36,7 +36,7 @@ class ImageExample(QWidget):
 		self.buttonExit = QPushButton('Exit', self)
 		self.buttonExit.clicked.connect(self.exitButtonClicked)
 
-		self.picture_label = QLabel(self) # Getting the picture 
+		self.picture_label = QLabel(self) # Getting the picture
 		self.my_image = QPixmap(self.pic)
 		self.picture_label.setPixmap(self.my_image)
 
@@ -54,6 +54,8 @@ class ImageExample(QWidget):
 		self.setLayout(vbox)
 
 		self.show()
+
+
 	def zoomingButtonClicked(self):
 		print("Zoom button clicked")
 
@@ -65,6 +67,8 @@ class ImageExample(QWidget):
 		rf.restore(self.pic)
 		self.my_image = QPixmap('good.jpg') # use this a reference
 		self.picture_label.setPixmap(self.my_image)
+		im = Image.open(self.pic)
+		im.show()
 
 	def filterButtonClicked(self): # This function will run when the filter button is click
 		print("Filter Button Clicked")
@@ -76,9 +80,8 @@ class ImageExample(QWidget):
 		print("Apply Filtered Clicked")
 		print(value)
 		if value == 1:
-			self.my_image = QPixmap('good.jpg')
-			self.picture_label.setPixmap(self.my_image)
-			#return cf.red_Multiply(self.pic, 100)
+			cf.red_Multiply(self.pic, 100)
+			return "increase red"
 		elif value == 2:
 			cf.green_Multiply(self.pic, 100)
 			return "increase blue"
@@ -87,6 +90,8 @@ class ImageExample(QWidget):
 
 		redImage = cf.red_Multiply(self.pic, 100)
 		redImage.save('temp.jpg')
+		self.my_image = QPixmap('temp.jpg')
+		self.picture_label.setPixmap(self.my_image)
 		#create a new pixmap
 		#put that pixmap in the label
 

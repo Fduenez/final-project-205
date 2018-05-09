@@ -36,6 +36,7 @@ def green_Multiply(img, value):
         new_list.append(temp)
     new_img.putdata(new_list)
     new_img.save('new_pic.jpg')
+    return new_img# I need help with returning the modified filter
 
 #mulitply blue value
 def blue_Multiply(img, value):

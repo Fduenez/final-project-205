@@ -65,31 +65,28 @@ class ImageExample(QWidget):
 	def restoreButtonClicked(self): # This function will run when the filter button is click
 		print("Restore Button Clicked")
 		rf.restore(self.pic)
-		self.my_image = QPixmap('good.jpg') # use this a reference
+		self.my_image = QPixmap('good.jpg')
 		self.picture_label.setPixmap(self.my_image)
 		im = Image.open(self.pic)
 		im.show()
-
-	def filterButtonClicked(self): # This function will run when the filter button is click
+	def filterButtonClicked(self):
 		print("Filter Button Clicked")
 		rf.restore(self.pic)
 		self.my_image = QPixmap('good.jpg')
 		self.picture_label.setPixmap(self.my_image)
 
-	def applyFilterClicked(self, value): # This function will run when the applyFilterClicked
+	def applyFilterClicked(self, value):
 		print("Apply Filtered Clicked")
 		print(value)
-		if value == 1:
-			cf.red_Multiply(self.pic, 100)
-			return "increase red"
-		elif value == 2:
-			cf.green_Multiply(self.pic, 100)
-			return "increase blue"
-		else:
-			return "increase green"
 
-		redImage = cf.red_Multiply(self.pic, 100)
-		redImage.save('temp.jpg')
+		if value == 1:
+			pic = cf.red_Multiply(self.pic, 0)
+		elif value == 2:
+			pic = cf.green_Multiply(self.pic, 0)
+		else:
+			pic = cf.blue_Multiply(self.pic, 0)
+
+		pic.save('temp.jpg')
 		self.my_image = QPixmap('temp.jpg')
 		self.picture_label.setPixmap(self.my_image)
 		#create a new pixmap

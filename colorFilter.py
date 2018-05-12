@@ -19,7 +19,7 @@ def red_Multiply(img, value):
     new_img = Image.new('RGB', (img_size[0], img_size[1]))
     new_list = []
     for p in img.getdata():
-        temp = ((p[0]*int(value))%255, p[1], p[2])#Fix the math
+        temp = (255, p[1], p[2])#Fix the math
         new_list.append(temp)
     new_img.putdata(new_list)
     #new_img.save('new_pic.jpg')
@@ -32,12 +32,11 @@ def green_Multiply(img, value):
     new_img = Image.new('RGB', (img_size[0], img_size[1]))
     new_list = []
     for p in img.getdata():
-        temp = (p[0], (p[1]*int(value))%255, p[2])
+        temp = (p[0], p[1],255)
         new_list.append(temp)
     new_img.putdata(new_list)
-    new_img.save('new_pic.jpg')
-    return new_img# I need help with returning the modified filter
-
+    return new_img
+    
 #mulitply blue value
 def blue_Multiply(img, value):
     img = Image.open(img)
@@ -45,7 +44,7 @@ def blue_Multiply(img, value):
     new_img = Image.new('RGB', (img_size[0], img_size[1]))
     new_list = []
     for p in img.getdata():
-        temp = (p[0], p[1], (p[2]*int(value))%255)
+        temp = (p[0], 255, p[2])
         new_list.append(temp)
     new_img.putdata(new_list)
-    new_img.save('new_pic.jpg')
+    return new_img

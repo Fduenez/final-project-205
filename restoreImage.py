@@ -1,8 +1,6 @@
 from PIL import Image
 import random
 
-
-
 def restore(filename):
     # Create the Pillow image from the imported image
     img = Image.open(filename)

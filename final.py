@@ -1,11 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QComboBox
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QComboBox, QFileDialog
 from PIL import Image
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap, QPalette
 import restoreImage as rf
 import colorFilter as cf
-#scroll, zoom
+#import searchFile as sf
 
 my_list = ["Filter", "increase red", "increase blue", "increase green"]
 
@@ -21,17 +21,16 @@ class ImageExample(QWidget):
 		self.buttonCropping = QPushButton('Crop', self) # Making the crop button
 		self.buttonCropping.clicked.connect(self.cropButtonClicked)
 
-		self.buttonRestoring = QPushButton('Restore Image', self ) # Making the filtering button
+		self.buttonRestoring = QPushButton('Restore Image', self ) # Restoring original image
 		self.buttonRestoring.clicked.connect(self.restoreButtonClicked)
 
-		self.buttonZooming = QPushButton('Zoom', self) # Making the filtering button
+		self.buttonZooming = QPushButton('Zoom', self) # Making the zooming button
 		self.buttonZooming.clicked.connect(self.zoomingButtonClicked)
 
-		#self.restartButton = QPushButton('Original', self) #Getting original file
-		self.my_combo_box = QComboBox()
-		self.my_combo_box.addItems(my_list)
+		self.my_combo_box = QComboBox() # Filter
+		self.my_combo_box.addItems(my_list) # Adding items to filter
 
-		self.my_combo_box.currentIndexChanged.connect(self.applyFilterClicked)
+		self.my_combo_box.currentIndexChanged.connect(self.applyFilterClicked) # Filter
 
 		self.buttonExit = QPushButton('Exit', self)
 		self.buttonExit.clicked.connect(self.exitButtonClicked)
@@ -40,12 +39,16 @@ class ImageExample(QWidget):
 		self.my_image = QPixmap(self.pic)
 		self.picture_label.setPixmap(self.my_image)
 
+		self.buttonSearching = QPushButton('Search', self) # Making the filtering button
+		self.buttonSearching.clicked.connect(self.searchingButtonClicked)
+
 		hbox = QHBoxLayout() # Making the layout for the buttons
-		hbox.addWidget(self.buttonCropping)
-		hbox.addWidget(self.buttonRestoring)
-		hbox.addWidget(self.buttonZooming)
-		hbox.addWidget(self.my_combo_box)
-		hbox.addWidget(self.buttonExit)
+		hbox.addWidget(self.buttonCropping) # Crop Button
+		hbox.addWidget(self.buttonRestoring) # If pic is modified then it restores the og img
+		hbox.addWidget(self.buttonZooming) # zoom button
+		hbox.addWidget(self.my_combo_box) # Filter Button
+		hbox.addWidget(self.buttonSearching) # Seach Button
+		hbox.addWidget(self.buttonExit) # Exit Button
 
 		vbox = QVBoxLayout()
 		vbox.addLayout(hbox)
@@ -69,6 +72,7 @@ class ImageExample(QWidget):
 		self.picture_label.setPixmap(self.my_image)
 		im = Image.open(self.pic)
 		im.show()
+
 	def filterButtonClicked(self):
 		print("Filter Button Clicked")
 		rf.restore(self.pic)
@@ -89,10 +93,17 @@ class ImageExample(QWidget):
 		pic.save('temp.jpg')
 		self.my_image = QPixmap('temp.jpg')
 		self.picture_label.setPixmap(self.my_image)
-		#create a new pixmap
-		#put that pixmap in the label
-
-
+##################################################################################3
+	def searchingButtonClicked(self):
+		print("Search Button Clicked")
+		search = QFileDialog.Options()
+		search = QFileDialog.DontUseNativeDialog
+		fileName,_= QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "", "All Files (*);;Python Files (*.py)", options=search)
+		print(fileName)
+		self.picture_label = QLabel(self)
+		self.my_image = QPixmap(fileName)
+		self.picture_label.setPixmap(self.my_image)
+#######################################################################################
 	def exitButtonClicked(self): # This function will run when the filter button is click
 		print("Exit Button Clicked")
 

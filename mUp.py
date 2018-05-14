@@ -1,29 +1,29 @@
 from PIL import Image
 
-def multipleUp(filename, n, type="generate"):
+def multipleUp(pil_img, n, type="generate"):
     if (n == 2):
-        twoUp(filename, type)
+        twoUp(pil_img, type)
     elif (n == 4):
-        fourUp(filename, type)
+        fourUp(pil_img, type)
     elif (n == 8):
-        eightUp(filename, type)
+        eightUp(pil_img, type)
     else:
         print("Multiple-up documents require a 2^n number.")
 
-def proofUp(filename, n, type="proof"):
+def proofUp(pil_img, n, type="proof"):
     if (n == 2):
-        twoUp(filename, type)
+        twoUp(pil_img, type)
     elif (n == 4):
-        fourUp(filename, type)
+        fourUp(pil_img, type)
     elif (n == 8):
-        eightUp(filename, type)
+        eightUp(pil_img, type)
     else:
         print("Multiple-up documents require a 2^n number.")
 
 
-def twoUp(filename, type):
+def twoUp(pil_img, type):
     # get source image
-    source = Image.open(filename)
+    source = pil_img
     # set target width and target height
     targetWidth = source.width
     targetHeight = source.height * 2
@@ -42,9 +42,9 @@ def twoUp(filename, type):
     elif (type == "proof"):
         target.show()
 
-def fourUp(filename, type):
+def fourUp(pil_img, type):
     # get source image
-    source = Image.open(filename)
+    source = pil_img
     # set target width and target height
     targetWidth = source.width * 2
     targetHeight = source.height * 2
@@ -67,6 +67,6 @@ def fourUp(filename, type):
     elif (type == "proof"):
         target.show()
 
-def eightUp(filename, type):
-    fourUp(filename, type="generate")
+def eightUp(pil_img, type):
+    fourUp(pil_img, type="generate")
     twoUp("mUp.jpg", type)

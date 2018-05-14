@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QComboBox, QFileDialog, QLineEdit
 from PIL import Image
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QPixmap, QPalette
 import restoreImage as rf
 import colorFilter as cf
@@ -9,10 +9,18 @@ import numberGenerator as ng
 import mUp as mu
 #import searchFile as sf
 
-my_list = ["Filter", "increase red", "increase blue", "increase green"]
+my_list = ["Filter", "increase red", "increase blue", "increase green", "negative", "greyscale", "sepia", "thumbnail"]
 my_colors = ["Red", "Green", "Blue", "Black", "White"]
 my_locations = ["top right", "top left", "bottom right", "bottom_left", "middle", "custom"]
 my_up = ["2-Up", "4-Up", "8-Up"]
+current_file = ""
+current_pil_img = Image.open("falcon_heavy.jpg")
+
+def changeCurrentPILimg(new_pil_img):
+	global current_pil_img
+	current_pil_img = new_pil_img
+
+
 
 class ImageExample(QWidget):
 	def __init__(self):
@@ -42,7 +50,8 @@ class ImageExample(QWidget):
 
 		self.picture_label = QLabel(self) # Getting the picture
 		self.my_image = QPixmap(self.pic)
-		self.picture_label.setPixmap(self.my_image)
+		self.scaled_image = self.my_image.scaled(600, 800, Qt.KeepAspectRatio, Qt.FastTransformation)
+		self.picture_label.setPixmap(self.scaled_image)
 
 		self.buttonSearching = QPushButton('Search', self) # Making the filtering button
 		self.buttonSearching.clicked.connect(self.searchingButtonClicked)
@@ -94,15 +103,21 @@ class ImageExample(QWidget):
 
 	def applyFilterClicked(self, value):
 		print("Apply Filtered Clicked")
-		print(value)
-
+			#print(value)
 		if value == 1:
-			pic = cf.red_Multiply(self.pic, 0)
+			pic = cf.red_Multiply(self.pic)
 		elif value == 2:
-			pic = cf.green_Multiply(self.pic, 0)
+			pic = cf.green_Multiply(self.pic)
+		elif value == 3:
+			pic = cf.blue_Multiply(self.pic)
+		elif value == 4:
+			pic = cf.negative_Multiply(self.pic)
+		elif value == 5:
+			pic = cf.grey_scale(self.pic)
+		elif value == 6:
+			pic = cf.sepia_scale(self.pic)
 		else:
-			pic = cf.blue_Multiply(self.pic, 0)
-
+			pic = cf.thumbnail_scale(self.pic)
 		pic.save('temp.jpg')
 		self.my_image = QPixmap('temp.jpg')
 		self.picture_label.setPixmap(self.my_image)
@@ -112,10 +127,12 @@ class ImageExample(QWidget):
 		search = QFileDialog.Options()
 		search = QFileDialog.DontUseNativeDialog
 		fileName,_= QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "", "All Files (*);;Python Files (*.py)", options=search)
-		print(fileName)
-		self.picture_label = QLabel(self)
+		new_pil_img = Image.open(fileName)
+		changeCurrentPILimg(new_pil_img)
+		new_pil_img.show()
 		self.my_image = QPixmap(fileName)
-		self.picture_label.setPixmap(self.my_image)
+		self.scaled_image = self.my_image.scaled(600, 800, Qt.KeepAspectRatio, Qt.FastTransformation)
+		self.picture_label.setPixmap(self.scaled_image)
 
 #######################################################################################
 
@@ -208,7 +225,7 @@ class NumberingWindow(QWidget):       # Class for opening a secondary window for
 		self.show()
 
 	def onProofClick(self):
-		filename = "falcon_heavy.jpg"
+		#filename = "/Users/RyanR/Desktop/final-project-205/falcon_heavy.jpg"
 		startNum = int(self.startingNumberField.text())
 		endNum = int(self.endingNumberField.text())
 		setPageNum = int(self.pagesInSetField.text())
@@ -217,10 +234,10 @@ class NumberingWindow(QWidget):       # Class for opening a secondary window for
 		fontSize = int(self.fontSizeField.text())
 		fontColor = my_colors[self.colorComboBox.currentIndex()]
 
-		ng.proofResult(filename, startNum, endNum, setPageNum, location, cLocation, fontSize, fontColor)
+		ng.proofResult(current_pil_img, startNum, endNum, setPageNum, location, cLocation, fontSize, fontColor)
 
 	def onSubmitClick(self):
-		filename = "falcon_heavy.jpg"
+		filename = current_file
 		startNum = int(self.startingNumberField.text())
 		endNum = int(self.endingNumberField.text())
 		setPageNum = int(self.pagesInSetField.text())
@@ -229,7 +246,7 @@ class NumberingWindow(QWidget):       # Class for opening a secondary window for
 		fontSize = int(self.fontSizeField.text())
 		fontColor = my_colors[self.colorComboBox.currentIndex()]
 
-		ng.generateNumbers(filename, startNum, endNum, setPageNum, location, cLocation, fontSize, fontColor)
+		ng.generateNumbers(current_pil_img, startNum, endNum, setPageNum, location, cLocation, fontSize, fontColor)
 
 class MultipleUpWindow(QWidget):       # Class for opening a secondary window to duplicate a document
 	def __init__(self):
@@ -272,7 +289,7 @@ class MultipleUpWindow(QWidget):       # Class for opening a secondary window to
 		elif (choice == "8-Up"):
 			up = 8
 
-		mu.proofUp("diplo.jpeg", up)
+		mu.proofUp(current_pil_img, up)
 
 	def onSubmitClick(self):
 		choice = my_up[self.nUpComboBox.currentIndex()]
@@ -283,7 +300,7 @@ class MultipleUpWindow(QWidget):       # Class for opening a secondary window to
 		elif (choice == "8-Up"):
 			up = 8
 
-		mu.multipleUp("diplo.jpeg", up)
+		mu.multipleUp(current_pil_img, up)
 
 im = QApplication(sys.argv)
 image_window = ImageExample()
